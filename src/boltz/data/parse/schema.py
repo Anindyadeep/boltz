@@ -15,6 +15,7 @@ from rdkit.Chem.rdchem import BondStereo, Conformer, Mol
 from rdkit.Chem.rdDistGeom import GetMoleculeBoundsMatrix
 from rdkit.Chem.rdMolDescriptors import CalcNumHeavyAtoms
 from scipy.optimize import linear_sum_assignment
+from rdkit.Chem import Descriptors
 
 from boltz.data import const
 from boltz.data.mol import load_molecules
@@ -1197,7 +1198,7 @@ def parse_boltz_schema(  # noqa: C901, PLR0915, PLR0912
                 ref_mol = get_mol(code, ccd, mol_dir)
 
                 if affinity:
-                    affinity_mw = AllChem.Descriptors.MolWt(ref_mol)
+                    affinity_mw = Descriptors.MolWt(ref_mol)
 
                 # Parse residue
                 residue = parse_ccd_residue(
@@ -1249,7 +1250,7 @@ def parse_boltz_schema(  # noqa: C901, PLR0915, PLR0912
                 raise ValueError(msg)
 
             mol_no_h = AllChem.RemoveHs(mol, sanitize=False)
-            affinity_mw = AllChem.Descriptors.MolWt(mol_no_h) if affinity else None
+            affinity_mw = Descriptors.MolWt(mol_no_h) if affinity else None
             extra_mols[f"LIG{ligand_id}"] = mol_no_h
             residue = parse_ccd_residue(
                 name=f"LIG{ligand_id}",
